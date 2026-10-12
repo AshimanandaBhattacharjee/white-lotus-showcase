@@ -43,10 +43,5 @@ I also asked for a deliberately small scope, plain code over clever abstractions
 
 ## My review and changes
 
-<!--
-  TODO before submitting: replace this comment with what YOU actually did after
-  generation, in your own words. Only list things you really did. Examples:
-  - read every file; questions I had and what I concluded
-  - things I changed by hand (each should be its own commit)
-  - anything I verified myself (ran it locally, checked images, tested on my phone)
--->
+- I chose the stack and set the ground rules before any code was written: a small scope, plain code I can explain, one commit per logical step, and testing against a real Postgres database rather than SQLite.
+- I'm doing a file-by-file review before the walkthrough. Anything I change will land as separate commits on top of this history.
