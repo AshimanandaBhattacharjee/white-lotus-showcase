@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# Env files (copy the .env.example files instead)
+.env
+.env.local
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
