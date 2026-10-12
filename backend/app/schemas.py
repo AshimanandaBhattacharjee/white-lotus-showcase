@@ -1,8 +1,9 @@
 """Request/response shapes (Pydantic). Validation lives here, so bad input is
 rejected with a 422 before it reaches the database."""
+import re
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, field_validator
 
 # Strip leading/trailing spaces on every string, so "   " fails min_length=1.
 _strict = ConfigDict(str_strip_whitespace=True)
@@ -44,3 +45,39 @@ class PropertyOut(BaseModel):
     image_url: str
     created_at: datetime
     updated_at: datetime
+
+
+class InquiryIn(BaseModel):
+    """Body a prospective buyer submits from a property page."""
+
+    model_config = _strict
+
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    phone: str = Field(min_length=1, max_length=20)
+    message: str = Field(min_length=1, max_length=2000)
+
+    @field_validator("phone")
+    @classmethod
+    def _phone_shape(cls, v: str) -> str:
+        # Allow "+91 98765-43210" style input but require 7-15 digits overall.
+        if not re.fullmatch(r"\+?[\d\s\-()]+", v):
+            raise ValueError("Phone may only contain digits, spaces, +, - and brackets")
+        digits = re.sub(r"\D", "", v)
+        if not 7 <= len(digits) <= 15:
+            raise ValueError("Phone must have between 7 and 15 digits")
+        return v
+
+
+class InquiryOut(BaseModel):
+    """What the admin dashboard sees. property_name is None if the listing
+    was deleted after the inquiry came in."""
+
+    id: int
+    property_id: int | None
+    property_name: str | None
+    name: str
+    email: str
+    phone: str
+    message: str
+    created_at: datetime

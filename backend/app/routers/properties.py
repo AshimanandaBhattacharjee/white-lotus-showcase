@@ -1,4 +1,4 @@
-"""/api/properties: list, read, create, update, delete."""
+"""/api/properties: public list + detail; create/update/delete need the admin key."""
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
@@ -6,6 +6,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.deps import require_admin
 from app.models import Property
 from app.schemas import PropertyIn, PropertyOut
 
@@ -67,7 +68,12 @@ def get_property(property_id: int, db: Session = Depends(get_db)):
     return _get_or_404(db, property_id)
 
 
-@router.post("", response_model=PropertyOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=PropertyOut,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_admin)],
+)
 def create_property(body: PropertyIn, db: Session = Depends(get_db)):
     prop = Property(**body.model_dump(mode="json"))
     db.add(prop)
@@ -76,7 +82,7 @@ def create_property(body: PropertyIn, db: Session = Depends(get_db)):
     return prop
 
 
-@router.put("/{property_id}", response_model=PropertyOut)
+@router.put("/{property_id}", response_model=PropertyOut, dependencies=[Depends(require_admin)])
 def update_property(property_id: int, body: PropertyIn, db: Session = Depends(get_db)):
     prop = _get_or_404(db, property_id)
     for field, value in body.model_dump(mode="json").items():
@@ -86,7 +92,11 @@ def update_property(property_id: int, body: PropertyIn, db: Session = Depends(ge
     return prop
 
 
-@router.delete("/{property_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{property_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_admin)],
+)
 def delete_property(property_id: int, db: Session = Depends(get_db)):
     prop = _get_or_404(db, property_id)
     db.delete(prop)

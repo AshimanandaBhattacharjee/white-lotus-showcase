@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import properties
+from app.routers import inquiries, properties
 
 app = FastAPI(title="White Lotus - Property Showcase API", version="1.0.0")
 
@@ -24,8 +24,14 @@ async def validation_error_handler(request: Request, exc: RequestValidationError
     for err in exc.errors():
         field = str(err["loc"][-1]) if err["loc"] else "request"
         msg = err["msg"].removeprefix("Value error, ")
-        if err["type"].startswith("url_"):
+        if err["type"] == "missing" or (
+            err["type"] == "string_too_short" and err.get("ctx", {}).get("min_length") == 1
+        ):
+            msg = "This field is required"
+        elif err["type"].startswith("url_"):
             msg = "Enter a full URL starting with http:// or https://"
+        elif field == "email":
+            msg = "Enter a valid email address"
         errors.setdefault(field, msg)
     return JSONResponse(
         status_code=422,
@@ -34,6 +40,7 @@ async def validation_error_handler(request: Request, exc: RequestValidationError
 
 
 app.include_router(properties.router)
+app.include_router(inquiries.router)
 
 
 @app.get("/api/health", tags=["meta"])
