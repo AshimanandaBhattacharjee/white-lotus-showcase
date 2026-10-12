@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+
+/* Design tokens. Names come from the lotus pond the brand is named after. */
+@theme {
+  --color-pond: #12332e; /* deep green: header, primary text */
+  --color-pond-soft: #2a4a44;
+  --color-petal: #f6f8f6; /* page background, cool white */
+  --color-lotus: #b03f63; /* primary actions only */
+  --color-lotus-dark: #8f3050;
+  --color-blush: #f3e3e6; /* success / selected tint */
+  --color-stone: #66716d; /* secondary text */
+  --color-reed: #d9e1dd; /* lines and borders */
+  --color-danger: #a8321f;
+
+  --font-display: 'Marcellus', Georgia, serif;
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-petal text-pond font-sans antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lotus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .field-input {
+    @apply w-full rounded-md border border-reed bg-white px-3 py-2 text-pond placeholder:text-stone/60
+      focus:border-pond focus:outline-none;
+  }
+  .field-input[aria-invalid='true'] {
+    @apply border-danger;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-lotus px-4 py-2 font-medium text-white
+      hover:bg-lotus-dark disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-reed bg-white px-4 py-2 font-medium
+      text-pond hover:border-pond disabled:cursor-not-allowed disabled:opacity-60;
+  }
+}
