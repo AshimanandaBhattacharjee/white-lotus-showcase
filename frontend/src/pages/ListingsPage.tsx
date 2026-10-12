@@ -43,11 +43,11 @@ export default function ListingsPage() {
       </div>
 
       <form
-        className="mt-8 grid gap-3 border-y border-reed py-4 sm:grid-cols-[1fr_1fr_1fr_auto] sm:items-end"
+        className="mt-8 grid grid-cols-2 items-end gap-3 border-y border-reed py-4 sm:grid-cols-[1fr_1fr_1fr_auto]"
         onSubmit={(e) => e.preventDefault()}
         aria-label="Filter residences"
       >
-        <label className="text-sm">
+        <label className="col-span-2 text-sm sm:col-span-1">
           <span className="mb-1 block font-medium">Location</span>
           <select className="field-input" value={location} onChange={(e) => setFilter('location', e.target.value)}>
             <option value="">All locations</option>
@@ -85,7 +85,7 @@ export default function ListingsPage() {
         </label>
         <button
           type="button"
-          className="btn-secondary"
+          className="btn-secondary col-span-2 sm:col-span-1"
           disabled={!hasFilters}
           onClick={() => setParams({}, { replace: true })}
         >
