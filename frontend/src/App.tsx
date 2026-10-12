@@ -2,6 +2,7 @@ import { Link, Route, Routes } from 'react-router-dom'
 
 import Layout from './components/Layout'
 import { EmptyState } from './components/States'
+import ListingsPage from './pages/ListingsPage'
 
 function NotFound() {
   return (
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<p>Listings coming next.</p>} />
+        <Route index element={<ListingsPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
