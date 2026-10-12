@@ -16,7 +16,9 @@ An internal tool for the White Lotus sales team: browse and filter luxury listin
 
 ## Run it locally
 
-**Prerequisites:** Python 3.11+, Node.js 20.19+ (or 22.12+), and Docker (for Postgres). If you already run PostgreSQL locally, skip Docker and point `DATABASE_URL` at it.
+**Prerequisites:** Python 3.11+, Node.js 20.19+ (or 22.12+), and Docker (for Postgres).
+
+No Docker? Install PostgreSQL 16+ directly (on Windows, the installer from postgresql.org), set the `postgres` user's password to `postgres` during setup, then create the database with `psql -U postgres -c "CREATE DATABASE whitelotus;"`. The defaults in `.env.example` and the tests then work unchanged.
 
 ### 1. Database
 

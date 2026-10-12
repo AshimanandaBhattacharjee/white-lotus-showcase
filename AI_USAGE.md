@@ -15,9 +15,9 @@
 | SQLAlchemy | Hibernate/JPA |
 | Alembic | Flyway |
 
-I also asked for a deliberately small scope, plain code over clever abstractions, and one commit per logical step, so the history shows how it was built.
+I told Claude I would need to walk through and defend every part of the code. On that basis we agreed a deliberately small scope, plain code over clever abstractions, and one commit per logical step, so the history shows how it was built.
 
-**Code generation.** Claude wrote the large majority of the code (backend, frontend, tests, configs) step by step, matching the commit history. It ran the code against a real local PostgreSQL after each step rather than generating everything at once.
+**Code generation.** Claude wrote the large majority of the code (backend, frontend, tests, configs) step by step in a single evening session; it made the commits as it finished each step, which is why they are minutes apart. It ran the code against a real local PostgreSQL after each step rather than generating everything at once.
 
 **Verification during the build.** Each step was checked before committing:
 
@@ -43,5 +43,5 @@ I also asked for a deliberately small scope, plain code over clever abstractions
 
 ## My review and changes
 
-- I chose the stack and set the ground rules before any code was written: a small scope, plain code I can explain, one commit per logical step, and testing against a real Postgres database rather than SQLite.
-- I'm doing a file-by-file review before the walkthrough. Anything I change will land as separate commits on top of this history.
+- I picked FastAPI + PostgreSQL from the options compared, because I can explain every layer through my Spring/Hibernate experience, and agreed the build approach before any code was written.
+- I'm doing a file-by-file review before the walkthrough. Anything I change will land as separate commits after the `submission` tag.
