@@ -18,8 +18,12 @@ export default function ListingsPage() {
   // Filters live in the URL, so a filtered view can be shared or bookmarked.
   const [params, setParams] = useSearchParams()
   const location = params.get('location') ?? ''
-  const minBedrooms = Number(params.get('min_bedrooms') ?? 0)
-  const sort = (params.get('sort') as SortOption) || 'newest'
+  // URLs can be hand-edited or old, so ignore values the API would reject
+  // instead of showing an error page.
+  const bedroomsParam = Number(params.get('min_bedrooms'))
+  const minBedrooms = Number.isInteger(bedroomsParam) && bedroomsParam > 0 ? bedroomsParam : 0
+  const sortParam = params.get('sort') ?? ''
+  const sort: SortOption = sortParam in SORT_LABELS ? (sortParam as SortOption) : 'newest'
   const hasFilters = Boolean(location || minBedrooms || params.get('sort'))
 
   const listings = useApi(

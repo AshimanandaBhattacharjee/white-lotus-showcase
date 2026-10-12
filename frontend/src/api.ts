@@ -57,7 +57,9 @@ async function request<T>(path: string, options: RequestInit & { admin?: boolean
     res = await fetch(`${BASE_URL}${path}`, {
       ...rest,
       headers: {
-        'Content-Type': 'application/json',
+        // Only when there is a body: a JSON Content-Type on a GET makes the
+        // browser send an extra CORS preflight request first.
+        ...(rest.body ? { 'Content-Type': 'application/json' } : {}),
         ...(admin ? { 'X-Admin-Key': adminKey.get() ?? '' } : {}),
         ...headers,
       },
